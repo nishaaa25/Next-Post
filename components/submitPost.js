@@ -1,5 +1,7 @@
 "use server";
-import { storePost } from "@/lib/posts";
+import { uploadImage } from "@/lib/cloudinary";
+import { storePost, updatePostLikeStatus } from "@/lib/posts";
+import { revalidatePath } from "next/cache";
 
 const { redirect } = require("next/navigation");
 
@@ -7,6 +9,14 @@ export async function createPost(prevState, formData) {
   const title = formData.get("title");
   const image = formData.get("image");
   const content = formData.get("content");
+
+  let imgUrl;
+  try {
+    imgUrl = await uploadImage(image);
+    console.log("Image upload successful");
+  } catch (error) {
+    console.log("Failed to upload image on cloudinary");
+  }
 
   let errors = {};
 
@@ -29,12 +39,17 @@ export async function createPost(prevState, formData) {
     return { errors };
   }
 
-  storePost({
-    imageUrl: "",
+  await storePost({
+    imageUrl: imgUrl,
     title,
     content,
     userId: 1,
   });
 
   redirect("/feed");
+}
+
+export async function toggleBtnLike(postId){
+  updatePostLikeStatus(postId, 2);
+  revalidatePath('/feed');
 }
