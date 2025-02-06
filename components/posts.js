@@ -5,9 +5,9 @@ import Image from 'next/image';
 function Post({ post }) {
   return (
     <article className="post">
-      <div className="post-image">
-        <Image src={post.image} alt={post.title} width={40}/>
-      </div>
+      {/* <div className="post-image">
+        <Image src={post.image} alt={post.title} width={40} height={40}/>
+      </div> */}
       <div className="post-content">
         <header>
           <div>
