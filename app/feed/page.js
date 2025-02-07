@@ -1,6 +1,6 @@
 import Posts from "@/components/posts";
 import { getPosts } from "@/lib/posts";
-import { useOptimistic } from "react";
+
 
 export default async function FeedPage() {
   const posts = await getPosts();
